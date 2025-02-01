@@ -91,20 +91,21 @@
             document.querySelector('.rain').style.display = rainEnabled ? 'block' : 'none';
         });
     </script>
+<style>
+/* Body setup for scrolling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: black;
+    color: white;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    overflow-y: auto; /* Allow vertical scrolling */
+    min-height: 100vh; /* Ensure the body takes at least full viewport height */
+}
 
-    <style>
-        /* Your provided CSS */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: black;
-            color: white;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            position: relative;
-        }
-
-        .container {
+.container {
     width: 90%; /* Takes 90% of the parent container's width */
     max-width: 800px; /* Limits the maximum width */
     height: auto; /* Adjusts height based on content */
@@ -116,47 +117,47 @@
     font-family: RainWorld;
 }
 
-        .grid {
-            position: relative; /* Ensures clicks go through */
-            z-index: 2; /* Makes sure it’s above overlays */
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            padding: 20px;
-        }
+.grid {
+    position: relative; /* Ensures clicks go through */
+    z-index: 2; /* Makes sure it’s above overlays */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px;
+}
 
-        .ingredient {
-            display: inline-block;
-            background-color: rgba(64, 64, 64, 0.4);
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            border: 2px solid gray;
-            user-select: none;
-            transition: background 0.2s ease-in-out, transform 0.1s ease;
-            z-index: 3; /* Ensures ingredient buttons are clickable */
-        }
+.ingredient {
+    display: inline-block;
+    background-color: rgba(64, 64, 64, 0.4);
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    border: 2px solid gray;
+    user-select: none;
+    transition: background 0.2s ease-in-out, transform 0.1s ease;
+    z-index: 3; /* Ensures ingredient buttons are clickable */
+}
 
-        .ingredient:hover {
-            background-color: darkgray;
-        }
+.ingredient:hover {
+    background-color: darkgray;
+}
 
-        .ingredient.selected {
-            background-color: #444;
-            color: white;
-            border-color: white;
-            transform: scale(1.05);
-        }
+.ingredient.selected {
+    background-color: #444;
+    color: white;
+    border-color: white;
+    transform: scale(1.05);
+}
 
-        #ingredientsList {
-            font-size: 20px;
-            margin-top: 20px;
-        }
+#ingredientsList {
+    font-size: 20px;
+    margin-top: 20px;
+}
 
-        .button {
+.button {
     display: inline-block;
     padding: 12px 24px;
     font-family: 'RainWorld', sans-serif;
@@ -189,27 +190,30 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-        /* Rain and lightning effects */
-        .rain, .lightning {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            pointer-events: none !important; /* Prevent blocking clicks */
-            z-index: 1;
-        }
+/* Rain and lightning effects */
+.rain, .lightning {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none !important; /* Prevent blocking clicks */
+    z-index: 1;
+}
 
-        .rain {
-            background: url('rain.gif') repeat; /* Example rain GIF */
-            animation: rainAnimation 1s linear infinite;
-        }
+.rain {
+    background: url('rain.gif') repeat; /* Example rain GIF */
+    animation: rainAnimation 1s linear infinite;
+}
 
-        @keyframes rainAnimation {
-            0% { background-position: 0 0; }
-            100% { background-position: 0 100%; }
-        }
-    </style>
+@keyframes rainAnimation {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 100%; }
+}
+
+
+</style>
+</body>
     
 
 </body>

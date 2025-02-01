@@ -10,84 +10,90 @@
     <title>Gourmand Crafting</title>
     <link rel="stylesheet" href="styles.css">
     <script src="script.js"></script>
-
     <style>
-        /* Fix clicking issues */
-        .grid {
-            position: relative; /* Ensures clicks go through */
-            z-index: 2; /* Makes sure it’s above overlays */
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            padding: 20px;
-        }
+/* Ensure the body allows vertical scrolling */
+body {
+    overflow-y: auto; /* Allow scrolling when necessary */
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+    height: 100%; /* Full height */
+    min-height: 100vh; /* Ensure the page takes at least full viewport height */
+}
 
-        /* Fix invisible overlays blocking clicks */
-        .rain, .lightning {
-            pointer-events: none !important; /* Ensure these don’t block clicks */
-        }
+.grid {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px;
+}
 
-        .ingredient {
-            display: inline-block;
-            background-color: rgba(64, 64, 64, 0.4);
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            border: 2px solid gray;
-            user-select: none;
-            transition: background 0.2s ease-in-out, transform 0.1s ease;
-            z-index: 3; /* Ensures ingredient buttons are clickable */
-        }
+.rain, .lightning {
+    pointer-events: none !important;
+}
 
-        .ingredient:hover {
-            background-color: darkgray;
-        }
-
-        .ingredient.selected {
-            background-color: #444;
-            color: white;
-            border-color: white;
-            transform: scale(1.05);
-        }
-
-        #result {
-    font-size: 24px;  /* Adjust size as needed */
+.ingredient {
+    display: inline-block;
+    background-color: rgba(64, 64, 64, 0.4);
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 18px;
     font-weight: bold;
-    color: white; /* Change color if needed */
+    cursor: pointer;
+    border: 2px solid gray;
+    user-select: none;
+    transition: background 0.2s ease-in-out, transform 0.1s ease;
+    z-index: 3;
+}
+
+.ingredient:hover {
+    background-color: darkgray;
+}
+
+.ingredient.selected {
+    background-color: #444;
+    color: white;
+    border-color: white;
+    transform: scale(1.05);
+}
+
+#result {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
     margin-top: 10px;
 }
+
 #ingredientToResult {
-        background-color: darkgray;
-        border: none;
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-        border-radius: 5px;
-        margin-top: 20px;
-        font-weight: bold;
-        display: block;
-        width: 200px; /* Set width to your preference */
-        margin-left: auto;
-        margin-right: auto;
-    }
+    background-color: darkgray;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 20px;
+    font-weight: bold;
+    display: block;
+    width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+}
 
-    #ingredientToResult:hover {
-        background-color: lightgray;
-    }
+#ingredientToResult:hover {
+    background-color: lightgray;
+}
 
-    /* Flexbox setup to ensure button stays at bottom center of the container */
+/* Flexbox setup to ensure button stays at bottom center of the container */
+#ingredientToResult {
+    margin-top: auto;
+    position: absolute;
+    bottom: 20px;
+    /* Add space from the bottom */
+}
 
-
-    /* Make sure the button is placed at the bottom center */
-    #ingredientToResult {
-        margin-top: auto; /* Push the button to the bottom */
-        position: absolute; /* Position the button at the bottom */
-        bottom: 20px; /* Add space from the bottom */
-    }
-    </style>
+</style>
 </head>
 <body>
     <button id="toggleRain"><font face="RainWorld">Disable Rain</font></button>
