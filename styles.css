@@ -15,24 +15,12 @@ html, body {
     min-height: 100vh; /* Ensure the body takes full viewport height */
 }
 
-/* Container setup */
-.container {
-    width: 90%; /* Takes 90% of the parent container's width */
-    max-width: 800px; /* Limits the maximum width */
-    height: auto; /* Adjusts height based on content */
-    min-height: 80vh; /* Ensures a minimum height */
-    background-color: rgba(64, 64, 64, 0.4); /* Dark gray with 40% opacity */
-    border: 5px solid rgb(78, 76, 76); /* Adjust the thickness of the outline as needed */
-    border-radius: 20px; /* Adjust the border radius for rounded corners */
-    margin: 20px auto; /* Centers the container */
-    font-family: RainWorld;
-}
-
 /* Rain effect setup */
 .rain {
     position: absolute;
     width: 100%;
     height: 100%;
+    z-index: 1; /* Lower z-index to keep it behind the container */
 }
 
 .raindrop {
@@ -51,6 +39,20 @@ html, body {
     100% {
         transform: translateY(100vh);
     }
+}
+
+/* Container setup */
+.container {
+    width: 90%; /* Takes 90% of the parent container's width */
+    max-width: 800px; /* Limits the maximum width */
+    height: auto; /* Adjusts height based on content */
+    min-height: 80vh; /* Ensures a minimum height */
+    background-color: rgba(64, 64, 64, 0.4); /* Dark gray with 40% opacity */
+    border: 5px solid rgb(78, 76, 76); /* Adjust the thickness of the outline as needed */
+    border-radius: 20px; /* Adjust the border radius for rounded corners */
+    margin: 20px auto; /* Centers the container */
+    font-family: RainWorld;
+    z-index: 2; /* Higher z-index to make sure container is above the rain */
 }
 
 /* Button styles */
