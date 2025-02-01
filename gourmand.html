@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Rain World Tools - Crafting">
+    <meta property="og:description" content="Find out how to craft any item!">
+    <meta property="og:image" content="favicon.png">
+    <meta property="og:url" content="https://rainworldtools.xyz/gourmand">
+    <title>Gourmand Crafting</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js"></script>
+
+    <style>
+        /* Fix clicking issues */
+        .grid {
+            position: relative; /* Ensures clicks go through */
+            z-index: 2; /* Makes sure it’s above overlays */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            padding: 20px;
+        }
+
+        /* Fix invisible overlays blocking clicks */
+        .rain, .lightning {
+            pointer-events: none !important; /* Ensure these don’t block clicks */
+        }
+
+        .ingredient {
+            display: inline-block;
+            background-color: rgba(64, 64, 64, 0.4);
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            border: 2px solid gray;
+            user-select: none;
+            transition: background 0.2s ease-in-out, transform 0.1s ease;
+            z-index: 3; /* Ensures ingredient buttons are clickable */
+        }
+
+        .ingredient:hover {
+            background-color: darkgray;
+        }
+
+        .ingredient.selected {
+            background-color: #444;
+            color: white;
+            border-color: white;
+            transform: scale(1.05);
+        }
+
+        #result {
+    font-size: 24px;  /* Adjust size as needed */
+    font-weight: bold;
+    color: white; /* Change color if needed */
+    margin-top: 10px;
+}
+#ingredientToResult {
+        background-color: darkgray;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px;
+        margin-top: 20px;
+        font-weight: bold;
+        display: block;
+        width: 200px; /* Set width to your preference */
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    #ingredientToResult:hover {
+        background-color: lightgray;
+    }
+
+    /* Flexbox setup to ensure button stays at bottom center of the container */
+
+
+    /* Make sure the button is placed at the bottom center */
+    #ingredientToResult {
+        margin-top: auto; /* Push the button to the bottom */
+        position: absolute; /* Position the button at the bottom */
+        bottom: 20px; /* Add space from the bottom */
+    }
+    </style>
+</head>
+<body>
+    <button id="toggleRain"><font face="RainWorld">Disable Rain</font></button>
+
+    <div class="rain"></div>
+    <div class="lightning"></div>
+
+    <br><br><br>
+
+    <center>
+        <div class="container">
+            <font face="RainWorld" color="white"><h1>Gourmand Crafting</h1>
+            <div class="grid" id="ingredientGrid"></div>
+            <p id="result">Select two ingredients to craft</p>
+           
+            
+           
+        </div>
+       
+    </center>
+
+    <script>
+        const recipes = {
+    "Batfly": ["Batnip + Dandelion", "Batnip + Mushroom", "Batnip + Noodle Egg", "Batnip + Seed", "Noodle Egg + Blue Fruit", "Noodle Egg + Rubbish", "Rubbish + Seed"],
+    "Batnip": ["Batfly + Beehive", "Batfly + Bubble Weed", "Batfly + Karma Flower", "Cherrybomb + Jellyfish"],
+    "Beehive": ["Cherrybomb + Batfly", "Cherrybomb + Batnip", "Cherrybomb + Blue Fruit", "Cherrybomb + Bug Egg", "Cherrybomb + Centipede", "Cherrybomb + Dandelion", "Cherrybomb + Glow Weed", "Cherrybomb + Gooieduck", "Cherrybomb + Grub", "Cherrybomb + Lilypuck", "Cherrybomb + Noodlefly", "Cherrybomb + Rubbish", "Cherrybomb + Spore Puff", "Centipede + Rubbish + Spore Puff", "Bug Egg + Dandelion", "Grenade + Lilypuck", "Grenade + Mushroom", "Rubbish + Gooieduck", "Rubbish + Spore Puff"],
+    "Bubble Weed": ["Hazer + Batnip", "Hazer + Karma Flower", "Hazer + Mushroom", "Hazer + Spore Puff", "Batnip + Bubble Fruit", "Batnip + Jellyfish", "Bubble Fruit + Cherrybomb"],
+    "Centipede": ["Noodle Egg + Cherrybomb", "Noodle Egg + Grenade", "Noodle Egg + Mushroom", "Noodle Egg + Slime Mold", "Noodle Egg + Spore Puff", "Seed + Cherrybomb", "Seed + Grenade", "Seed + Mushroom", "Seed + Spore Puff", "Mushroom + Cherrybomb", "Mushroom + Singularity", "Batnip + Glow Weed"],
+    "Cherrybomb": ["Batnip + Flashbang", "Batnip + Lantern", "Batnip + Rubbish", "Batnip + Slime Mold", "Beehive + Flashbang", "Beehive + Lantern", "Beehive + Slime Mold", "Bubble Weed + Flashbang", "Bubble Weed + Rubbish", "Grub + Spore Puff", "Lantern + Centipede"],
+    "Fire Egg": ["Singularity + Batfly", "Singularity + Batnip", "Singularity + Beehive", "Singularity + Blue Fruit", "Singularity + Bubble Fruit", "Singularity + Bubble Weed", "Singularity + Bug Egg", "Singularity + Centipede", "Singularity + Cherrybomb", "Singularity + Flashbang", "Singularity + Glow Weed", "Singularity + Gooieduck", "Singularity + Grenade", "Singularity + Grub", "Singularity + Hazer", "Singularity + Jellyfish", "Singularity + Karma Flower", "Singularity + Lantern", "Singularity + Lilypuck", "Singularity + Mask", "Singularity + Noodlefly", "Singularity + Rubbish", "Singularity + Seed", "Singularity + Slime Mold", "Singularity + Spore Puff", "Grenade + Karma Flower"],
+    "Flashbang": ["Lantern + Blue Fruit", "Lantern + Bubble Fruit", "Lantern + Rubbish", "Beehive + Grub", "Blue Fruit + Rubbish", "Grenade + Hazer"],
+    "Glow Weed": ["Lantern + Bubble Weed", "Lantern + Dandelion", "Lantern + Flashbang", "Lantern + Jellyfish", "Lantern + Lilypuck", "Bubble Weed + Dandelion", "Bubble Weed + Grub", "Bubble Weed + Hazer", "Flashbang + Hazer"],
+    "Gooieduck": ["Mushroom + Batfly", "Mushroom + Beehive", "Mushroom + Blue Fruit", "Mushroom + Bug Egg", "Mushroom + Centipede", "Mushroom + Dandelion", "Mushroom + Glow Weed", "Mushroom + Grub", "Mushroom + Jellyfish", "Mushroom + Spore Puff", "Spore Puff + Beehive", "Spore Puff + Bubble Fruit", "Spore Puff + Bug Egg", "Spore Puff + Dandelion", "Spore Puff + Glow Weed", "Spore Puff + Grenade", "Spore Puff + Jellyfish", "Batnip + Blue Fruit", "Batnip + Bug Egg"],
+    "Grenade": ["Fire Egg + Batnip", "Fire Egg + Beehive", "Fire Egg + Bubble Weed", "Fire Egg + Cherrybomb", "Fire Egg + Flashbang", "Fire Egg + Lantern", "Fire Egg + Mask", "Fire Egg + Mushroom", "Fire Egg + Rubbish", "Fire Egg + Spore Puff", "Cherrybomb + Beehive", "Cherrybomb + Karma Flower", "Cherrybomb + Lantern", "Cherrybomb + Rubbish", "Cherrybomb + Spore Puff", "Karma Flower + Beehive", "Karma Flower + Rubbish"],
+    "Grub": ["Noodle Egg + Fire Egg", "Noodle Egg + Flashbang", "Noodle Egg + Lantern", "Noodle Egg + Mask", "Noodle Egg + Singularity", "Seed + Flashbang", "Seed + Lantern", "Seed + Mask"],
+    "Hazer": ["Noodle Egg + Bubble Fruit", "Noodle Egg + Bubble Weed", "Noodle Egg + Glow Weed", "Noodle Egg + Lilypuck", "Beehive + Bubble Fruit", "Beehive + Jellyfish", "Bubble Weed + Mushroom", "Bubble Weed + Seed", "Lilypuck + Batnip"],
+    "Jellyfish": ["Beehive + Glow Weed", "Beehive + Hazer", "Beehive + Lilypuck", "Bubble Fruit + Flashbang", "Bubble Fruit + Rubbish", "Bubble Weed + Centipede", "Bubble Weed + Lilypuck", "Hazer + Cherrybomb"],
+    "Karma Flower": ["Singularity + Batfly", "Singularity + Batnip", "Singularity + Beehive", "Singularity + Blue Fruit", "Singularity + Bubble Fruit", "Singularity + Bubble Weed", "Singularity + Bug Egg", "Singularity + Centipede", "Singularity + Cherrybomb", "Singularity + Dandelion", "Singularity + Flashbang", "Singularity + Glow Weed", "Singularity + Gooieduck", "Singularity + Grenade", "Singularity + Grub", "Singularity + Hazer", "Singularity + Jellyfish", "Singularity + Lantern", "Singularity + Lilypuck", "Singularity + Mask", "Singularity + Noodlefly", "Singularity + Rubbish", "Singularity + Seed", "Singularity + Slime Mold", "Singularity + Spore Puff", "Grenade + Karma Flower"],
+    "Lantern": ["Flashbang + Cherrybomb", "Flashbang + Glow Weed", "Flashbang + Gooieduck", "Flashbang + Grenade", "Flashbang + Grub", "Flashbang + Karma Flower", "Flashbang + Lilypuck", "Flashbang + Rubbish", "Flashbang + Slime Mold", "Rubbish + Glow Weed", "Rubbish + Grub", "Rubbish + Lilypuck", "Rubbish + Slime Mold", "Grenade + Cherrybomb", "Grenade + Glow Weed", "Grenade + Slime Mold", "Slime Mold + Cherrybomb"],
+    "Lilypuck": ["Bubble Weed + Blue Fruit", "Bubble Weed + Bubble Fruit", "Bubble Weed + Glow Weed", "Bubble Weed + Jellyfish", "Jellyfish + Flashbang", "Jellyfish + Rubbish", "Lantern + Glow Weed", "Lantern + Gooieduck", "Rubbish + Hazer"],
+    "Mask": ["Karma Flower + Grub"],
+    "Mushroom": ["Spore Puff + Batfly", "Spore Puff + Batnip", "Spore Puff + Blue Fruit", "Spore Puff + Bubble Weed", "Spore Puff + Flashbang", "Spore Puff + Gooieduck", "Spore Puff + Lantern", "Spore Puff + Lilypuck", "Spore Puff + Noodlefly", "Spore Puff + Slime Mold", "Batnip + Batfly", "Batnip + Bubble Weed", "Batnip + Centipede", "Batnip + Gooieduck", "Batnip + Grub", "Batnip + Noodlefly", "Batfly + Flashbang", "Batfly + Lantern", "Batfly + Rubbish", "Bubble Weed + Bug Egg", "Bubble Weed + Noodlefly", "Bubble Weed + Slime Mold", "Beehive + Blue Fruit", "Beehive + Dandelion", "Lantern + Slime Mold"],
+    "Neuron Fly": ["Karma Flower + Overseer"],
+    "Noodlefly": ["Bug Egg + Lantern", "Bug Egg + Rubbish", "Lantern + Noodlefly", "Mushroom + Bubble Fruit"],
+    "Overseer": ["Neuron Fly + Batnip", "Neuron Fly + Beehive", "Neuron Fly + Bubble Weed", "Neuron Fly + Cherrybomb", "Neuron Fly + Flashbang", "Neuron Fly + Grenade", "Neuron Fly + Karma Flower", "Neuron Fly + Lantern", "Neuron Fly + Mask", "Neuron Fly + Mushroom", "Neuron Fly + Noodle Egg", "Neuron Fly + Pearl", "Neuron Fly + Singularity", "Neuron Fly + Spore Puff", "Karma Flower + Noodle Egg", "Karma Flower + Seed"],
+    "Pearl": ["Overseer + Batfly", "Overseer + Batnip", "Overseer + Beehive", "Overseer + Blue Fruit", "Overseer + Bubble Fruit", "Overseer + Bubble Weed", "Overseer + Bug Egg", "Overseer + Centipede", "Overseer + Cherrybomb", "Overseer + Dandelion", "Overseer + Fire Egg", "Overseer + Flashbang", "Overseer + Glow Weed", "Overseer + Gooieduck", "Overseer + Grenade", "Overseer + Grub", "Overseer + Hazer", "Overseer + Jellyfish", "Overseer + Lantern", "Overseer + Lilypuck", "Overseer + Mask", "Overseer + Noodlefly", "Overseer + Rubbish", "Overseer + Seed", "Overseer + Slime Mold", "Overseer + Spore Puff", "Mask + Batnip", "Mask + Beehive", "Mask + Blue Fruit", "Mask + Bubble Fruit", "Mask + Bubble Weed", "Mask + Bug Egg", "Mask + Cherrybomb", "Mask + Dandelion", "Mask + Flashbang", "Mask + Glow Weed", "Mask + Gooieduck", "Mask + Grenade", "Mask + Jellyfish", "Mask + Karma Flower", "Mask + Lantern", "Mask + Lilypuck", "Mask + Mushroom", "Mask + Rubbish", "Mask + Slime Mold", "Mask + Spore Puff", "Lantern + Grenade", "Lantern + Grub", "Lantern + Karma Flower"],
+    "Seed": ["Karma Flower + Batnip", "Karma Flower + Blue Fruit", "Karma Flower + Bubble Fruit", "Karma Flower + Bubble Weed", "Karma Flower + Dandelion", "Karma Flower + Glow Weed", "Karma Flower + Gooieduck", "Karma Flower + Lilypuck", "Karma Flower + Slime Mold", "Mask + Batfly", "Mask + Centipede", "Mask + Grub", "Mask + Hazer", "Mask + Noodlefly", "Noodle Egg + Batfly", "Noodle Egg + Centipede", "Noodle Egg + Grub", "Noodle Egg + Hazer", "Noodle Egg + Noodlefly"],
+    "Singularity Bomb": ["Fire Egg + Grenade", "Fire Egg + Karma Flower"],
+    "Slime Mold": ["Blue Fruit + Flashbang"],
+    "Snail": ["Grenade + Bubble Fruit", "Bubble Weed + Cherrybomb", "Hazer + Lantern", "Jellyfish + Noodle Egg"],
+    "Spore Puff": ["Beehive + Batnip", "Beehive + Bubble Weed", "Beehive + Bug Egg", "Beehive + Gooieduck", "Beehive + Grenade", "Beehive + Noodlefly", "Beehive + Rubbish", "Mushroom + Flashbang", "Mushroom + Gooieduck", "Mushroom + Lantern", "Mushroom + Noodlefly", "Mushroom + Rubbish", "Grenade + Bubble Weed", "Grenade + Dandelion", "Grenade + Gooieduck", "Grenade + Lantern", "Grenade + Noodlefly", "Noodlefly + Flashbang", "Noodlefly + Rubbish", "Centipede + Karma Flower", "Gooieduck + Bubble Weed", "Rubbish + Dandelion"],
+    "Worm": ["Beehive + Centipede", "Beehive + Seed", "Beehive + Noodle Egg", "Noodle Egg + Gooieduck"]
+};
+
+        const ingredients = [...new Set(Object.values(recipes).flat().map(pair => pair.split(" + ")).flat())];
+        let selected = [];
+
+        function updateResult() {
+            if (selected.length === 2) {
+                let combination = `${selected[0]} + ${selected[1]}`;
+                let reverseCombination = `${selected[1]} + ${selected[0]}`;
+                let result = Object.keys(recipes).find(key => recipes[key].includes(combination) || recipes[key].includes(reverseCombination));
+
+                document.getElementById("result").innerText = result ? `You crafted: ${result}` : "Invalid combination";
+
+                if (result) {
+                    setTimeout(() => {
+                        selected = [];
+                        document.querySelectorAll(".ingredient").forEach(el => el.classList.remove("selected"));
+                    }, 1000);
+                }
+            }
+        }
+
+        function toggleSelection(element, ingredient) {
+            if (selected.includes(ingredient)) {
+                selected = selected.filter(item => item !== ingredient);
+                element.classList.remove("selected");
+            } else {
+                if (selected.length < 2) {
+                    selected.push(ingredient);
+                    element.classList.add("selected");
+                }
+            }
+            updateResult();
+        }
+
+        function createGrid() {
+            const grid = document.getElementById("ingredientGrid");
+            ingredients.forEach(ingredient => {
+                let div = document.createElement("div");
+                div.classList.add("ingredient");
+                div.innerText = ingredient;
+                div.onclick = () => toggleSelection(div, ingredient);
+                grid.appendChild(div);
+            });
+        }
+
+        createGrid();
+    </script>
+      <br>
+      <br>
+      <p style="text-align: right;">;<font face="RainWorld" color="darkgray" size="2"> 
+          Made by <a href="https://github.com/gmBlahaj/" style="color: darkgray; text-decoration: none ;">gm_blahaj</a> 
+      </font> </p>
+</body>
+</html>
