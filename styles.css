@@ -68,3 +68,55 @@ html, body {
         opacity: 0;
     }
 }
+
+.button {
+    display: inline-block;
+    padding: 12px 24px;
+    font-family: 'RainWorld', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff; /* White text */
+    background-color: #333; /* Dark gray background */
+    border: 2px solid #444; /* Slightly lighter gray border */
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.2s ease, border-color 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative; /* Ensure it can use z-index */
+    z-index: 10; /* Make sure it's above other elements */
+}
+
+.button:hover {
+    background-color: #444; /* Slightly lighter gray on hover */
+    border-color: #555; /* Lighter border on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.button:active {
+    background-color: #222; /* Darker gray on click */
+    border-color: #333; /* Darker border on click */
+    transform: translateY(0); /* Reset lift effect */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: rgba(78, 76, 76, 0.7);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+button:hover {
+    background-color: rgba(4, 4, 4, 0.7)
+}
