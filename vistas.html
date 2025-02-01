@@ -1,86 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta property="og:title" content="Rain World Tools - Vista Points">
-    <meta property="og:description" content="Maps with vista points">
-    <meta property="og:image" content="favicon.png">
-    <meta property="og:url" content="https://rainworldtools.xyz/vistas">
-
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <title>Vista Points</title>
     <link rel="stylesheet" href="styles.css">
     <script defer src="script.js"></script>
-
-    <title>Vista Points</title>
     <link rel="icon" href="favicon.ico">
 </head>
 <body>
 
-    <button id="toggleRain"> <font face="RainWorld"> Disable Rain</font></button>
+    <button id="toggleRain">Disable Rain</button>
+
+
 
     <div class="rain"></div>
-    <div class="lightning"></div>
-
-    <br><br><br>
 
     <center>
         <div class="container">
-            <h1>Vista Point Maps </h1>
+            <h1>Vista Point Maps</h1>
             <div class="grid" id="resultGrid"></div>
             <div class="image-container" id="imageGallery"></div>
         </div>
     </center>
 
     <script>
-        // Example array of image file names (you can replace this with server-side logic to fetch actual files)
-        const imageFiles = [
-        'Chimney Canopy.webp',
-        'Looks to the Moon.webp',
-        'Shoreline.webp',
-        'The Rot.webp',
-        'Drainage System.webp',
-        'Metropolis.webp',
-        'Silent Construct.webp',
-        'Undergrowth.webp',
-        'Farm Arrays.webp',
-        'Outer Expanse.webp',
-        'Sky Islands.webp',
-        'Garbage Wastes.webp',
-        'Outskirts.webp',
-        'Subterranean.webp',
-        'Industrial Complex.webp',
-        'Shaded Citadel.webp',
-        'The Exterior.webp'
-    ];
+        // Create Rain Effect Dynamically
+        function createRain() {
+            const rainContainer = document.querySelector('.rain');
+            rainContainer.innerHTML = ''; // Clear previous rain
 
-        // Get the image container where images will be displayed
-        const imageGallery = document.getElementById('imageGallery');
+            const numDrops = 100; // Number of raindrops
+            for (let i = 0; i < numDrops; i++) {
+                const drop = document.createElement('div');
+                drop.classList.add('raindrop');
 
-        // Loop through the image files and create HTML for each image
-        imageFiles.forEach(fileName => {
-            // Create a new div for each image + name container
-            const imageItem = document.createElement('div');
-            imageItem.classList.add('image-item');
+                // Random positions and animation delays
+                drop.style.left = Math.random() * 100 + 'vw';
+                drop.style.animationDuration = (Math.random() * 2 + 2) + 's'; // 2s to 4s
+                drop.style.animationDelay = Math.random() * 2 + 's';
 
-            // Create image element
-            const img = document.createElement('img');
-            img.src = 'VistaPoints/' + fileName;
-            img.alt = fileName;
+                rainContainer.appendChild(drop);
+            }
+        }
 
-            // Create paragraph element for the file name without extension
-            const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
-            const p = document.createElement('p');
-            p.textContent = fileNameWithoutExtension;
-
-            // Append image and file name to the container
-            imageItem.appendChild(img);
-            imageItem.appendChild(p);
-
-            // Append the container to the gallery
-            imageGallery.appendChild(imageItem);
-        });
+        createRain(); // Initialize rain effect
 
         // Toggle rain effect
         let rainEnabled = true;
@@ -88,10 +52,38 @@
             rainEnabled = !rainEnabled;
             document.querySelector('.rain').style.display = rainEnabled ? 'block' : 'none';
         });
+
+        // Load images dynamically
+        const imageFiles = [
+            'Chimney Canopy.webp', 'Looks to the Moon.webp', 'Shoreline.webp',
+            'The Rot.webp', 'Drainage System.webp', 'Metropolis.webp',
+            'Silent Construct.webp', 'Undergrowth.webp', 'Farm Arrays.webp',
+            'Outer Expanse.webp', 'Sky Islands.webp', 'Garbage Wastes.webp',
+            'Outskirts.webp', 'Subterranean.webp', 'Industrial Complex.webp',
+            'Shaded Citadel.webp', 'The Exterior.webp'
+        ];
+
+        const imageGallery = document.getElementById('imageGallery');
+
+        imageFiles.forEach(fileName => {
+            const imageItem = document.createElement('div');
+            imageItem.classList.add('image-item');
+
+            const img = document.createElement('img');
+            img.src = 'VistaPoints/' + fileName;
+            img.alt = fileName;
+
+            const p = document.createElement('p');
+            p.textContent = fileName.replace(/\.[^/.]+$/, "");
+
+            imageItem.appendChild(img);
+            imageItem.appendChild(p);
+            imageGallery.appendChild(imageItem);
+        });
     </script>
 
     <style>
-        /* Body setup for scrolling */
+        /* General Styling */
         body {
             font-family: Arial, sans-serif;
             background-color: black;
@@ -100,116 +92,50 @@
             margin: 0;
             padding: 0;
             position: relative;
-            overflow-y: auto; /* Allow vertical scrolling */
-            min-height: 100vh; /* Ensure the body takes at least full viewport height */
+            overflow-y: auto;
+            min-height: 100vh;
         }
 
         .container {
-            width: 90%; /* Takes 90% of the parent container's width */
-            max-width: 800px; /* Limits the maximum width */
-            height: auto; /* Adjusts height based on content */
-            min-height: 80vh; /* Ensures a minimum height */
-            background-color: rgba(64, 64, 64, 0.4); /* Dark gray with 40% opacity */
-            border: 5px solid rgb(78, 76, 76); /* Adjust the thickness of the outline as needed */
-            border-radius: 20px; /* Adjust the border radius for rounded corners */
-            margin: 20px auto; /* Centers the container */
-            font-family: RainWorld;
-        }
-
-        .grid {
-            position: relative; /* Ensures clicks go through */
-            z-index: 2; /* Makes sure it’s above overlays */
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            padding: 20px;
-        }
-
-        .ingredient {
-            display: inline-block;
+            width: 90%;
+            max-width: 800px;
+            min-height: 80vh;
             background-color: rgba(64, 64, 64, 0.4);
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            border: 2px solid gray;
-            user-select: none;
-            transition: background 0.2s ease-in-out, transform 0.1s ease;
-            z-index: 3; /* Ensures ingredient buttons are clickable */
+            border: 5px solid rgb(78, 76, 76);
+            border-radius: 20px;
+            margin: 20px auto;
         }
 
-        .ingredient:hover {
-            background-color: darkgray;
-        }
-
-        .ingredient.selected {
-            background-color: #444;
-            color: white;
-            border-color: white;
-            transform: scale(1.05);
-        }
-
-        #ingredientsList {
-            font-size: 20px;
-            margin-top: 20px;
-        }
-
-        .button {
-            display: inline-block;
-            padding: 12px 24px;
-            font-family: 'RainWorld', sans-serif;
-            font-size: 18px;
-            font-weight: bold;
-            color: #fff; /* White text */
-            background-color: #333; /* Dark gray background */
-            border: 2px solid #444; /* Slightly lighter gray border */
-            border-radius: 8px;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-            transition: background-color 0.3s ease, transform 0.2s ease, border-color 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            position: relative; /* Ensure it can use z-index */
-            z-index: 10; /* Make sure it's above other elements */
-        }
-
-        .button:hover {
-            background-color: #444; /* Slightly lighter gray on hover */
-            border-color: #555; /* Lighter border on hover */
-            transform: translateY(-2px); /* Slight lift effect */
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        .button:active {
-            background-color: #222; /* Darker gray on click */
-            border-color: #333; /* Darker border on click */
-            transform: translateY(0); /* Reset lift effect */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Rain and lightning effects */
-        .rain, .lightning {
-            position: absolute;
+        /* Rain and Raindrop Styles */
+        .rain {
+            position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            pointer-events: none !important; /* Prevent blocking clicks */
+            width: 100%;
+            height: 100vh;
+            pointer-events: none;
+            overflow: hidden;
             z-index: 1;
         }
 
-        .rain {
-            background: url('rain.gif') repeat; /* Example rain GIF */
-            animation: rainAnimation 1s linear infinite;
+        .raindrop {
+            position: absolute;
+            width: 0.2vw;
+            height: 6vh;
+            background: linear-gradient(transparent, rgba(173, 216, 230, 0.8));
+            animation: fall linear infinite;
         }
 
-        @keyframes rainAnimation {
-            0% { background-position: 0 0; }
-            100% { background-position: 0 100%; }
+        @keyframes fall {
+            0% {
+                transform: translateY(-100%);
+            }
+            100% {
+                transform: translateY(calc(100vh + 100%));
+            }
         }
 
+        /* Image Gallery */
         .image-container {
             display: flex;
             flex-direction: column;
@@ -218,13 +144,13 @@
         }
 
         .image-item {
-            margin-bottom: 200px; /* Space between images */
+            margin-bottom: 200px;
             text-align: center;
         }
 
         .image-container img {
-            width: 100%; /* Adjust width as needed */
-            max-width: 800px; /* Limit the max width */
+            width: 100%;
+            max-width: 800px;
         }
 
         .image-container p {
@@ -232,6 +158,43 @@
             font-size: 14px;
             color: #fff;
         }
+
+        /* Button */
+        #toggleRain {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    font-size: 15px;
+    font-family: "RainWorld", sans-serif; /* Apply RainWorld font directly */
+    cursor: pointer;
+    border: 2px solid #444;
+    background-color: rgba(51, 51, 51, 0.8);
+    color: white;
+    border-radius: 8px;
+    z-index: 100;
+    transition: background-color 0.3s, transform 0.2s, border-color 0.3s;
+    display: inline-block; /* Ensures it does not stretch */
+    width: fit-content; /* Makes the button only as wide as its content */
+    min-width: 7px; /* Optional: Prevents the button from being too small */
+    text-align: center; /* Centers the text inside */
+    white-space: nowrap; /* Prevents text from breaking into multiple lines */
+}
+
+#toggleRain:hover {
+    background-color: rgba(85, 85, 85, 0.9);
+    border-color: #666;
+    transform: translateY(-2px);
+}
+
+#toggleRain:active {
+    background-color: rgba(34, 34, 34, 0.9);
+    border-color: #222;
+    transform: translateY(0);
+}
+
+
+
     </style>
 </body>
 </html>

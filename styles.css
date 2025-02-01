@@ -37,9 +37,10 @@ html, body {
         transform: translateY(-100%);
     }
     100% {
-        transform: translateY(100vh);
+        transform: translateY(calc(100vh + 100%));
     }
 }
+
 
 /* Container setup */
 .container {
