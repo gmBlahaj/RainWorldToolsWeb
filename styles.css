@@ -5,11 +5,11 @@
 
 
 
-  .container {
+.container {
     width: 800px; /* Adjust the width as needed */
     height: 1000px; /* Adjust the height as needed */
-    background-color: black;
-    border: 5px solid rgb(126, 126, 126); /* Adjust the thickness of the outline as needed */
+    background-color: rgba(64, 64, 64, 0.4); /* Dark gray with 70% opacity */
+    border: 5px solid rgb(78, 76, 76); /* Adjust the thickness of the outline as needed */
     border-radius: 20px; /* Adjust the border radius for rounded corners */
 }
 
