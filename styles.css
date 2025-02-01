@@ -48,26 +48,7 @@ html, body {
     }
 }
 
-.lightning {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: white;
-    opacity: 0;
-    animation: thunder 10s infinite;
-}
 
-@keyframes thunder {
-    0%, 100% {
-        opacity: 0;
-    }
-    1%, 3%, 5%, 7%, 9% {
-        opacity: 0.8;
-    }
-    2%, 4%, 6%, 8%, 10% {
-        opacity: 0;
-    }
-}
 
 .button {
     display: inline-block;
