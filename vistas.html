@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta property="og:title" content="Rain World Tools - Vista Points">
+    <meta property="og:description" content="Maps with vista points">
+    <meta property="og:image" content="favicon.png">
+    <meta property="og:url" content="https://rainworldtools.xyz/vistas">
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="script.js"></script>
+
+    <title>Vista Points</title>
+    <link rel="icon" href="favicon.ico">
+</head>
+<body>
+
+    <button id="toggleRain"> <font face="RainWorld"> Disable Rain</font></button>
+
+    <div class="rain"></div>
+    <div class="lightning"></div>
+
+    <br><br><br>
+
+    <center>
+        <div class="container">
+            <h1>Vista Point Maps </h1>
+            <div class="grid" id="resultGrid"></div>
+            <div class="image-container" id="imageGallery"></div>
+        </div>
+    </center>
+
+    <script>
+        // Example array of image file names (you can replace this with server-side logic to fetch actual files)
+        const imageFiles = [
+        'Chimney Canopy.webp',
+        'Looks to the Moon.webp',
+        'Shoreline.webp',
+        'The Rot.webp',
+        'Drainage System.webp',
+        'Metropolis.webp',
+        'Silent Construct.webp',
+        'Undergrowth.webp',
+        'Farm Arrays.webp',
+        'Outer Expanse.webp',
+        'Sky Islands.webp',
+        'Garbage Wastes.webp',
+        'Outskirts.webp',
+        'Subterranean.webp',
+        'Industrial Complex.webp',
+        'Shaded Citadel.webp',
+        'The Exterior.webp'
+    ];
+
+        // Get the image container where images will be displayed
+        const imageGallery = document.getElementById('imageGallery');
+
+        // Loop through the image files and create HTML for each image
+        imageFiles.forEach(fileName => {
+            // Create a new div for each image + name container
+            const imageItem = document.createElement('div');
+            imageItem.classList.add('image-item');
+
+            // Create image element
+            const img = document.createElement('img');
+            img.src = 'VistaPoints/' + fileName;
+            img.alt = fileName;
+
+            // Create paragraph element for the file name without extension
+            const fileNameWithoutExtension = fileName.replace(/\.[^/.]+$/, "");
+            const p = document.createElement('p');
+            p.textContent = fileNameWithoutExtension;
+
+            // Append image and file name to the container
+            imageItem.appendChild(img);
+            imageItem.appendChild(p);
+
+            // Append the container to the gallery
+            imageGallery.appendChild(imageItem);
+        });
+
+        // Toggle rain effect
+        let rainEnabled = true;
+        document.getElementById('toggleRain').addEventListener('click', () => {
+            rainEnabled = !rainEnabled;
+            document.querySelector('.rain').style.display = rainEnabled ? 'block' : 'none';
+        });
+    </script>
+
+    <style>
+        /* Body setup for scrolling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: black;
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            overflow-y: auto; /* Allow vertical scrolling */
+            min-height: 100vh; /* Ensure the body takes at least full viewport height */
+        }
+
+        .container {
+            width: 90%; /* Takes 90% of the parent container's width */
+            max-width: 800px; /* Limits the maximum width */
+            height: auto; /* Adjusts height based on content */
+            min-height: 80vh; /* Ensures a minimum height */
+            background-color: rgba(64, 64, 64, 0.4); /* Dark gray with 40% opacity */
+            border: 5px solid rgb(78, 76, 76); /* Adjust the thickness of the outline as needed */
+            border-radius: 20px; /* Adjust the border radius for rounded corners */
+            margin: 20px auto; /* Centers the container */
+            font-family: RainWorld;
+        }
+
+        .grid {
+            position: relative; /* Ensures clicks go through */
+            z-index: 2; /* Makes sure it’s above overlays */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            padding: 20px;
+        }
+
+        .ingredient {
+            display: inline-block;
+            background-color: rgba(64, 64, 64, 0.4);
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            border: 2px solid gray;
+            user-select: none;
+            transition: background 0.2s ease-in-out, transform 0.1s ease;
+            z-index: 3; /* Ensures ingredient buttons are clickable */
+        }
+
+        .ingredient:hover {
+            background-color: darkgray;
+        }
+
+        .ingredient.selected {
+            background-color: #444;
+            color: white;
+            border-color: white;
+            transform: scale(1.05);
+        }
+
+        #ingredientsList {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            font-family: 'RainWorld', sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff; /* White text */
+            background-color: #333; /* Dark gray background */
+            border: 2px solid #444; /* Slightly lighter gray border */
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.2s ease, border-color 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative; /* Ensure it can use z-index */
+            z-index: 10; /* Make sure it's above other elements */
+        }
+
+        .button:hover {
+            background-color: #444; /* Slightly lighter gray on hover */
+            border-color: #555; /* Lighter border on hover */
+            transform: translateY(-2px); /* Slight lift effect */
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .button:active {
+            background-color: #222; /* Darker gray on click */
+            border-color: #333; /* Darker border on click */
+            transform: translateY(0); /* Reset lift effect */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Rain and lightning effects */
+        .rain, .lightning {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none !important; /* Prevent blocking clicks */
+            z-index: 1;
+        }
+
+        .rain {
+            background: url('rain.gif') repeat; /* Example rain GIF */
+            animation: rainAnimation 1s linear infinite;
+        }
+
+        @keyframes rainAnimation {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100%; }
+        }
+
+        .image-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .image-item {
+            margin-bottom: 200px; /* Space between images */
+            text-align: center;
+        }
+
+        .image-container img {
+            width: 100%; /* Adjust width as needed */
+            max-width: 800px; /* Limit the max width */
+        }
+
+        .image-container p {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #fff;
+        }
+    </style>
+</body>
+</html>

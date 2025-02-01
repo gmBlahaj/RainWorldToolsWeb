@@ -111,3 +111,19 @@ button {
 button:hover {
     background-color: rgba(4, 4, 4, 0.7);
 }
+
+
+/* Image container styles */
+.image-container {
+    display: none;
+    margin-top: 20px;
+    transition: max-height 0.5s ease-in-out;
+    overflow: hidden;
+}
+
+.image-container img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+

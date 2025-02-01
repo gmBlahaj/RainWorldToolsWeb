@@ -29,4 +29,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         isRaining = !isRaining; // Toggle the state
     });
+
+    function toggleImage(id) {
+        const imageContainer = document.getElementById(`image-${id}`);
+    
+        if (imageContainer.style.display === "block") {
+            // If the image is already visible, hide it
+            imageContainer.style.display = "none";
+        } else {
+            // Otherwise, show the image and apply sliding down effect
+            imageContainer.style.display = "block";
+            imageContainer.style.maxHeight = imageContainer.scrollHeight + "px"; // Slide down
+        }
+    }
+    
 });
