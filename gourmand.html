@@ -142,52 +142,59 @@
     "Worm": ["Beehive + Centipede", "Beehive + Seed", "Beehive + Noodle Egg", "Noodle Egg + Gooieduck"]
 };
 
-        const ingredients = [...new Set(Object.values(recipes).flat().map(pair => pair.split(" + ")).flat())];
-        let selected = [];
+const ingredients = [...new Set(Object.values(recipes).flat().map(pair => pair.split(" + ")).flat())];
+    let selected = [];
 
-        function updateResult() {
+    function updateResult() {
+        if (selected.length === 2) {
+            let combination = `${selected[0]} + ${selected[1]}`;
+            let reverseCombination = `${selected[1]} + ${selected[0]}`;
+            let result = Object.keys(recipes).find(key => recipes[key].includes(combination) || recipes[key].includes(reverseCombination));
+
+            document.getElementById("result").innerText = result ? `You crafted: ${result}` : "Invalid combination";
+        } else {
+            document.getElementById("result").innerText = "Select two ingredients to craft";
+        }
+    }
+
+    function toggleSelection(element, ingredient) {
+        if (selected.includes(ingredient)) {
+            // If ingredient is already selected, unselect it
+            selected = selected.filter(item => item !== ingredient);
+            element.classList.remove("selected");
+        } else {
+            // If two ingredients are already selected, unselect the first one and select the new one
             if (selected.length === 2) {
-                let combination = `${selected[0]} + ${selected[1]}`;
-                let reverseCombination = `${selected[1]} + ${selected[0]}`;
-                let result = Object.keys(recipes).find(key => recipes[key].includes(combination) || recipes[key].includes(reverseCombination));
-
-                document.getElementById("result").innerText = result ? `You crafted: ${result}` : "Invalid combination";
-
-                if (result) {
-                    setTimeout(() => {
-                        selected = [];
-                        document.querySelectorAll(".ingredient").forEach(el => el.classList.remove("selected"));
-                    }, 1000);
-                }
-            }
-        }
-
-        function toggleSelection(element, ingredient) {
-            if (selected.includes(ingredient)) {
-                selected = selected.filter(item => item !== ingredient);
-                element.classList.remove("selected");
+                const firstIngredient = selected[0];
+                selected = [selected[1], ingredient]; // Replace the first with the second and add the new ingredient
+                // Remove the first selected ingredient visually
+                document.querySelectorAll(".ingredient").forEach(el => {
+                    if (el.innerText === firstIngredient) {
+                        el.classList.remove("selected");
+                    }
+                });
             } else {
-                if (selected.length < 2) {
-                    selected.push(ingredient);
-                    element.classList.add("selected");
-                }
+                selected.push(ingredient);
             }
-            updateResult();
+            element.classList.add("selected");
         }
 
-        function createGrid() {
-            const grid = document.getElementById("ingredientGrid");
-            ingredients.forEach(ingredient => {
-                let div = document.createElement("div");
-                div.classList.add("ingredient");
-                div.innerText = ingredient;
-                div.onclick = () => toggleSelection(div, ingredient);
-                grid.appendChild(div);
-            });
-        }
+        updateResult(); // Update result every time an ingredient is selected
+    }
 
-        createGrid();
-    </script>
+    function createGrid() {
+        const grid = document.getElementById("ingredientGrid");
+        ingredients.forEach(ingredient => {
+            let div = document.createElement("div");
+            div.classList.add("ingredient");
+            div.innerText = ingredient;
+            div.onclick = () => toggleSelection(div, ingredient);
+            grid.appendChild(div);
+        });
+    }
+
+    createGrid(); // Initialize the grid of ingredients
+</script>
       <br>
       <br>
 
